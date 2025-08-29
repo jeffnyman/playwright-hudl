@@ -7,6 +7,11 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/jeffnyman/playwright-hudl/actions/workflows/playwright.yml"><img src="https://github.com/jeffnyman/playwright-hudl/actions/workflows/playwright.yml/badge.svg" alt="Playwright Hudl Test Status"></a>
+  <a href="https://github.com/jeffnyman/playwright-hudl/actions/workflows/lint.yml"><img src="https://github.com/jeffnyman/playwright-hudl/actions/workflows/lint.yml/badge.svg" alt="Playwright Hudl Lint Status"></a>
+</p>
+
+<p align="center">
   <img src="https://badgen.net/badge/Built%20With/TypeScript/blue"> 
   <a href="https://github.com/jeffnyman/playwright-hudl/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Playwright Hudl is released under the MIT license.">
