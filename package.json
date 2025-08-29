@@ -19,6 +19,10 @@
   },
   "homepage": "https://github.com/jeffnyman/playwright-hudl#readme",
   "devDependencies": {
-    "prettier": "3.6.2"
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "prettier": "3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.41.0"
   }
 }
