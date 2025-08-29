@@ -9,5 +9,13 @@
     "url": "https://testerstories.com"
   },
   "license": "MIT",
-  "description": "Playwright Project for Hudl Assessment"
+  "description": "Playwright Project for Hudl Assessment",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffnyman/playwright-hudl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jeffnyman/playwright-hudl/issues"
+  },
+  "homepage": "https://github.com/jeffnyman/playwright-hudl#readme"
 }
