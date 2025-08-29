@@ -52,7 +52,7 @@ You can run any Playwright tests using the [VS Code extension](https://playwrigh
 
 ### 🔸 Ludic UI Tests (EXTRA CREDIT)
 
-The Ludic pages are simply designed as blog content pages. Their complexity comes in from how the header and the scroll-to-top functionality have dynamic aspects, in terms of how and when they display. The dark-light mode is a relatively simply implementation that also accounts for the system setting. There are also "click to enlarge" elements on the page that provide a modal view for images.
+The Ludic pages are simply designed as blog content pages. Their complexity comes in from how the header and the scroll-to-top functionality have dynamic aspects, in terms of how and when they display. The dark-light mode is a relatively simply implementation that also accounts for the system setting. There are two spec files here: one that uses a page object and the other that does not.
 
 To run these tests:
 

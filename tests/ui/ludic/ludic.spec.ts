@@ -101,7 +101,7 @@ test("dark/light mode changes background", async ({ page }) => {
   expect(darkBgColor).toBe("rgb(0, 0, 0)");
 });
 
-test("Scroll to top widget path drawing effect", async ({ page }) => {
+test("scroll to top widget path drawing effect", async ({ page }) => {
   const progressPath = page.locator(".progress-wrap path");
   const initialStrokeDashoffset = await progressPath.evaluate(
     (node) => node.style.strokeDashoffset,
