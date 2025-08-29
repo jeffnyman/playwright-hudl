@@ -38,6 +38,8 @@ Clone the repository and then set everything up:
 npm ci
 ```
 
+The reason for `npm ci` is covered best in this [Stack Overflow answer](https://stackoverflow.com/a/53325242).
+
 Make sure to install the browsers that Playwright will need.
 
 ```shell
@@ -51,6 +53,8 @@ In Playwright, a project is a logical group of tests that run using the same con
 You can run any Playwright tests using the [VS Code extension](https://playwright.dev/docs/getting-started-vscode) if you have it installed.
 
 ### 🔸 Ludic UI Tests (EXTRA CREDIT)
+
+I'm using my own site material for this. I have a sample article called [A Ludic Historian Précis](https://testerstories.com/xyzzy/ludic/article/precis.html).
 
 The Ludic pages are simply designed as blog content pages. Their complexity comes in from how the header and the scroll-to-top functionality have dynamic aspects, in terms of how and when they display. The dark-light mode is a relatively simply implementation that also accounts for the system setting. There are two spec files here: one that uses a page object and the other that does not.
 
