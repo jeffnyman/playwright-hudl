@@ -50,6 +50,16 @@ In Playwright, a project is a logical group of tests that run using the same con
 
 You can run any Playwright tests using the [VS Code extension](https://playwright.dev/docs/getting-started-vscode) if you have it installed.
 
+### 🔸 Ludic UI Tests (EXTRA CREDIT)
+
+The Ludic pages are simply designed as blog content pages. Their complexity comes in from how the header and the scroll-to-top functionality have dynamic aspects, in terms of how and when they display. The dark-light mode is a relatively simply implementation that also accounts for the system setting. There are also "click to enlarge" elements on the page that provide a modal view for images.
+
+To run these tests:
+
+```shell
+npx playwright test --project "Ludic UI Tests"
+```
+
 ### 🔸 Tautology Tests
 
 These tests do not use a browser at all. They are meant to showcase the idea of simply writing tests and having some general tautologies that validate the basic operation of the testing framework.

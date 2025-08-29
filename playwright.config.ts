@@ -1,4 +1,4 @@
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Configuration
@@ -47,6 +47,16 @@ export default defineConfig({
       name: "Tautology Tests",
       testDir: "./tests/tautology",
       testMatch: "**/*.spec.ts",
+    },
+    {
+      name: "Ludic UI Tests",
+      testDir: "./tests/ui/ludic",
+      testMatch: "**/*.spec.ts",
+      use: {
+        baseURL: "https://testerstories.com",
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1280, height: 720 },
+      },
     },
   ],
 });
