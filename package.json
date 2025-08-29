@@ -18,6 +18,11 @@
     "url": "https://github.com/jeffnyman/playwright-hudl/issues"
   },
   "homepage": "https://github.com/jeffnyman/playwright-hudl#readme",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
     "@playwright/test": "^1.55.0",
