@@ -58,5 +58,14 @@ export default defineConfig({
         viewport: { width: 1280, height: 720 },
       },
     },
+    {
+      name: "Playground UI Tests",
+      testDir: "./tests/ui/playground",
+      testMatch: "**/*.spec.ts",
+      use: {
+        baseURL: "https://testerstories.com",
+        ...devices["Desktop Chrome"],
+      },
+    },
   ],
 });

@@ -64,6 +64,18 @@ To run these tests:
 npx playwright test --project "Ludic UI Tests"
 ```
 
+### 🔸 Playground UI Tests (EXTRA CREDIT)
+
+The application is here is my [Playwright Playwround](https://testerstories.com/xyzzy/). The playground area is designed to provide a simple landing page but then add some complexity. For example, the navigation pull out menu can have some challenges around checking for visibility and whether the widgets are in the viewport or not.
+
+To run all the tests:
+
+```shell
+npx playwright test --project "Playground UI Tests"
+```
+
+The various pages within the playground are meant to run the gamut from relatively simple implementations of forms to slightly complex tables to elements that dynamically update but only upon the detection of certain user actions.
+
 ### 🔸 Tautology Tests
 
 These tests do not use a browser at all. They are meant to showcase the idea of simply writing tests and having some general tautologies that validate the basic operation of the testing framework.
