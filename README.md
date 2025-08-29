@@ -147,7 +147,7 @@ You can run linting in this project by doing this:
 npm run lint
 ```
 
-If you're feeling confident that the linter will be able to auto-fix your isue, you can run it like this:
+If you're feeling confident that the linter will be able to auto-fix your issue, you can run it like this:
 
 ```shell
 npm run lint:fix
