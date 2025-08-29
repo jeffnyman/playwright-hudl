@@ -7,6 +7,7 @@
 </p>
 
 <p align="center">
+  <img src="https://badgen.net/badge/Built%20With/TypeScript/blue"> 
   <a href="https://github.com/jeffnyman/playwright-hudl/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Playwright Hudl is released under the MIT license.">
   </a>
@@ -109,8 +110,65 @@ npx playwright test --project "Tautology Tests" --grep "@canary"
 - Small code is more easily seen to be obviously correct.
 - Code that’s more obviously correct can be more easily composed.
 - Be willing to trade elegance of design for practicality of implementation.
-- Embrace brevity, but do not sacrifice readability. Concise, not terse.
+- Embrace brevity without sacrificing readability. Concise, not terse.
 - Prefer elegance over efficiency where efficiency is less than critical.
+
+These principles lean toward literate, intention-revealing code; code that is readable and maintainable without succumbing to over-engineering.
+
+---
+
+## 🧬 Code Quality
+
+This project uses Prettier.
+
+<p align="center">
+  <a href="https://prettier.io/docs/en/index.html"><img src="https://img.shields.io/badge/Documentation-Prettier-f7ba3e.svg?logo=prettier" alt="Prettier"></a>
+  <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/GitHub-Prettier-f7ba3e.svg?logo=github" alt="Prettier - GitHub"></a>
+  <a href="https://stackoverflow.com/questions/tagged/prettier"><img src="https://img.shields.io/badge/stackoverflow-Prettier-e87922.svg?logo=stackoverflow" alt="Prettier - Stack Overflow"></a>
+</p>
+
+This is critical for any automation-based project. To run Prettier and automatically fix any issues, you can do this:
+
+```shell
+npm run format
+```
+
+This project uses ESLint.
+
+<p align="center">
+  <a href="https://eslint.org/docs/latest/"><img src="https://img.shields.io/badge/Documentation-ESLint-4b32c3.svg?logo=eslint" alt="ESLint"></a>
+  <a href="https://github.com/eslint/eslint"><img src="https://img.shields.io/badge/GitHub-ESLint-4b32c3.svg?logo=github" alt="ESLint - GitHub"></a>
+  <a href="https://stackoverflow.com/questions/tagged/eslint"><img src="https://img.shields.io/badge/stackoverflow-ESLint-e87922.svg?logo=stackoverflow" alt="ESLint - Stack Overflow"></a>
+</p>
+
+You can run linting in this project by doing this:
+
+```shell
+npm run lint
+```
+
+If you're feeling confident that the linter will be able to auto-fix your isue, you can run it like this:
+
+```shell
+npm run lint:fix
+```
+
+---
+
+## 👤 Author
+
+<p align="center">
+  Made with 🤍 by Jeff Nyman
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white">
+</p>
+
+<p align="center">
+  <a href="https://testerstories.com" target="_blank" ><img alt="Website - Jeff Nyman" src="https://img.shields.io/badge/Website--%23F8952D?style=social"></a>&nbsp;&nbsp;&nbsp;
+  <a href="https://www.linkedin.com/in/jeffnyman/" target="_blank" ><img alt="Linkedin - Jeff Nyman" src="https://img.shields.io/badge/Linkedin--%23F8952D?style=social&logo=linkedin"></a>
+</p>
 
 ---
 
