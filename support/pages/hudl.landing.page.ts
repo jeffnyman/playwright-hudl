@@ -138,7 +138,9 @@ export class HudlLandingPage {
 
     await expect(this.invalidEmail).toHaveText("Enter a valid email.");
 
-    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)", {
+      timeout: 10000,
+    });
   }
 
   async invalidLogin_Missing_Email() {
@@ -154,8 +156,12 @@ export class HudlLandingPage {
     // colors in RGB format so you want to check for that. You
     // could also check the CSS custom property. Note that
     // both checks below might be overkill. I would expect a
-    // PR with this code to at least be challenged on that.
-    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)");
+    // PR with this code to at least be challenged on that. The
+    // timeout is for a classic timing issue with CSS loading.
+    // The idea is to handle default/placeholder colors.
+    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)", {
+      timeout: 10000,
+    });
     await expect(this.emailError).toHaveClass(/ulp-error-info/);
   }
 
@@ -171,7 +177,9 @@ export class HudlLandingPage {
       "Incorrect username or password.",
     );
 
-    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)", {
+      timeout: 10000,
+    });
     await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
   }
 
@@ -185,7 +193,9 @@ export class HudlLandingPage {
 
     await expect(this.missingPassword).toHaveText("Enter your password.");
 
-    await expect(this.missingPassword).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.missingPassword).toHaveCSS("color", "rgb(232, 28, 0)", {
+      timeout: 10000,
+    });
     await expect(this.missingPassword).toHaveClass(/ulp-validator-error/);
   }
 
@@ -201,7 +211,9 @@ export class HudlLandingPage {
       "Your email or password is incorrect. Try again.",
     );
 
-    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)", {
+      timeout: 10000,
+    });
     await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
   }
 }
