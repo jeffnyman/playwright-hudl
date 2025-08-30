@@ -2,13 +2,13 @@
 
 ## Overview
 
-Here I want to outline the broad testing approach and considerations for authentication functionality, with a focus on comprehensive coverage while respecting security constraints and real-world testing limitations. This is how I think about this broadly and not necessarily how everything was implemented in the assessment. And, again, that's because this was a time-boxed assessment.
+Here I want to outline the broad testing approach and considerations for authentication functionality, with a focus on comprehensive coverage while respecting security constraints and real-world testing limitations. This is how I think about this topic broadly but this is not necessarily how everything was implemented in the time-boxed assessment.
 
 ## Testing Philosophy
 
 ### Equivalence Class Partitioning
 
-Authentication testing is organized around equivalence classes to ensure comprehensive coverage without redundant test cases.
+I feel authentication testing is best organized around equivalence classes to ensure comprehensive coverage without redundant test cases.
 
 **Valid Login Scenarios:**
 
@@ -27,7 +27,7 @@ Authentication testing is organized around equivalence classes to ensure compreh
 - Incorrect password for valid email
 - Correct email with various incorrect password formats
 
-Each equivalence class represents a distinct failure mode or success path, ensuring that test cases cover meaningfully different system behaviors.
+The idea here is that each equivalence class represents a distinct failure mode or success path, ensuring that test cases cover meaningfully different system behaviors.
 
 ## Security Considerations
 
@@ -37,14 +37,14 @@ Before automating authentication tests, I feel it's crucial to analyze the appli
 
 - **Generic vs. Specific Errors**: Modern applications typically return generic error messages like "Your email or password is incorrect" rather than specific messages like "Email not found" or "Password incorrect"
 - **Security Rationale**: Generic messages help mitigate brute force attacks by not revealing whether an email exists in the system
-- **Testing Impact**: This affects what we can reliably test and validate in our automation
+- **Testing Impact**: This affects what I can reliably test and validate in my automation
 
 ### Rate Limiting and Account Lockouts
 
 Authentication systems often implement protective measures that impact testing:
 
 - **Login Attempt Limits**: Many systems cap the number of failed login attempts
-- **Testing Constraints**: During exploratory testing, I avoided extensive invalid login testing to prevent account lockouts; this was a particular concern for me given the nature of the assessment
+- **Testing Constraints**: During my exploratory testing, I avoided extensive invalid login testing to prevent account lockouts; this was a particular concern for me given the nature of the assessment
 - **Production Considerations**: In a real testing environment, I would need dedicated test accounts or the ability to reset lockout states
 
 ## Test Coverage Analysis
@@ -55,9 +55,10 @@ The current test suite covers core authentication equivalence classes.
 
 1. **Valid Authentication**: Complete successful login flow
 2. **Missing Email**: User attempts login without entering email
-3. **Missing Password**: User enters email but no password
-4. **Invalid Password**: User enters valid email with incorrect password
-5. **Credential Mismatch**: Valid email format with wrong password
+3. **Invaild Email**: User attempts login with an invalid email
+4. **Missing Password**: User enters email but no password
+5. **Invalid Password**: User enters valid email with incorrect password
+6. **Credential Mismatch**: Valid email format with wrong password
 
 ### Identified Coverage Gaps
 

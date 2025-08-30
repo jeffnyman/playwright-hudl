@@ -35,7 +35,10 @@
 ---
 
 > [!IMPORTANT]
-> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TSETING.md) document that talks more about overall test strategy. I also kept a relatively [atomic commit history](https://github.com/jeffnyman/playwright-hudl/commits/main/) to show how I built the project from scratch.
+> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TESTING.md) document that talks more about overall test strategy. You can see my "Principles of Coding" further down in this README.
+
+> [!TIP]
+> I also kept a relatively [atomic commit history](https://github.com/jeffnyman/playwright-hudl/commits/main/) to show how I built the project from scratch.
 
 ---
 
@@ -79,7 +82,7 @@ This project uses an `.env` file to set environment various for authentication. 
 cp .env.sample .env
 ```
 
-Fill in the `HUDL_EMAIL` and `HUDL_PASSWORD` with your specific credentials.
+Fill in the `HUDL_EMAIL`, `HUDL_PASSWORD` and `HUDL_DISPLAY_NAME` with your specific credentials.
 
 ### 🔸 Ludic UI Tests (EXTRA CREDIT)
 
@@ -180,6 +183,12 @@ If you're feeling confident that the linter will be able to auto-fix your issue,
 ```shell
 npm run lint:fix
 ```
+
+---
+
+## 🌀 Pipeline
+
+This project is using GitHub Actions. See [playwright.yml](https://github.com/jeffnyman/playwright-hudl/blob/main/.github/workflows/playwright.yml) and [lint.yml](https://github.com/jeffnyman/playwright-hudl/blob/main/.github/workflows/lint.yml).
 
 ---
 
