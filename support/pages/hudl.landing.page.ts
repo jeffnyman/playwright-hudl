@@ -26,6 +26,31 @@ export class HudlLandingPage {
     this.missingPassword = page.locator("#error-cs-password-required");
   }
 
+  static async checkSiteHealth(page) {
+    try {
+      console.log("Performing Hudl.com health check...");
+
+      const response = await page.request.get("https://www.hudl.com/", {
+        timeout: 20000,
+      });
+
+      if (response.status() >= 400) {
+        throw new Error(`HTTP ${response.status()}: ${response.statusText()}`);
+      }
+
+      await page.goto("https://www.hudl.com/", {
+        waitUntil: "domcontentloaded",
+        timeout: 30000,
+      });
+
+      console.log("✅ Hudl.com health check passed");
+      return true;
+    } catch (error) {
+      console.error("❌ Hudl.com health check failed:", error.message);
+      return false;
+    }
+  }
+
   async goto() {
     await this.page.goto("/", { waitUntil: "networkidle" });
   }

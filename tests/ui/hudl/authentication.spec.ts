@@ -4,6 +4,16 @@ import { getHudlCredentials } from "../../../support/env";
 
 let hudlLandingPage: HudlLandingPage;
 
+test.beforeAll(async ({ browser }) => {
+  const page = await browser.newPage();
+  const isHealthy = await HudlLandingPage.checkSiteHealth(page);
+  await page.close();
+
+  if (!isHealthy) {
+    test.skip(true, "Skipping Hudl tests. Site appears to be down or slow.");
+  }
+});
+
 test.beforeEach(async ({ page }) => {
   getHudlCredentials();
 
