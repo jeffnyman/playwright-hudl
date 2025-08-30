@@ -192,6 +192,120 @@ This project is using GitHub Actions. See [playwright.yml](https://github.com/je
 
 ---
 
+## 🐳 Docker
+
+To run tests in Docker containers using Docker Compose, follow these steps.
+
+### Prerequisites
+
+- Install [Docker](https://docs.docker.com/get-docker/)
+- Install [Docker Compose](https://docs.docker.com/compose/install/) (included with Docker Desktop)
+
+### Setup
+
+1. **Create Environment File**
+
+Create a `.env` file in the project root with your test credentials:
+
+```
+HUDL_EMAIL=Your Email
+HUDL_PASSWORD=Your Password
+HUDL_DISPLAY_NAME=Your Display Name
+```
+
+2. **Build the Docker Image**
+
+```sh
+docker-compose build
+```
+
+### Running Tests
+
+**Run only Hudl tests:**
+
+```sh
+docker-compose run --rm playwright npx playwright test --project="Hudl Tests"
+```
+
+**Run only UI tests (exclude tautology):**
+
+```sh
+docker-compose run --rm playwright npx playwright test tests/ui/
+```
+
+**Run all tests:**
+
+```sh
+docker-compose run --rm playwright npx playwright test
+```
+
+**Run a specific test file:**
+
+```sh
+docker-compose run --rm playwright npx playwright test authentication.spec.ts
+```
+
+**Run tests in headed mode (for debugging):**
+
+```sh
+docker-compose run --rm playwright npx playwright test --headed
+```
+
+**Run tests with custom reporter:**
+
+```sh
+docker-compose run --rm playwright npx playwright test --reporter=html
+```
+
+### Viewing Results
+
+Test results and reports are automatically saved to your local `./results/` directory.
+
+- `./results/` - Screenshots, videos, traces, and HTML reports
+- `./results/results.json` - JSON test results
+- `./results/results.xml` - JUnit XML results
+
+To view the HTML report:
+
+```sh
+open ./results/index.html
+# or on Linux: xdg-open ./results/index.html
+```
+
+### Development Workflow
+
+**For active development, mount your local code:**
+
+```sh
+docker-compose run --rm -v $(pwd):/app playwright bash
+```
+
+This gives you an interactive shell where you can edit tests and see changes immediately, run individual commands, and debug test issues.
+
+### Cleanup
+
+Docker Compose automatically cleans up containers when using `--rm` flag. To remove the built image:
+
+```sh
+docker-compose down --rmi all
+```
+
+### Example Commands
+
+```sh
+# Build and run all tests
+docker-compose build
+docker-compose run --rm playwright npx playwright test
+
+# Quick test run (rebuilds if needed)
+docker-compose run --rm playwright npx playwright test
+
+# Interactive debugging session
+docker-compose run --rm -v $(pwd):/app playwright bash
+```
+
+---
+
 ## 👤 Author
 
 <p align="center">

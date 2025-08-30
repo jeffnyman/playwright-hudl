@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  playwright:
+    build: .
+    env_file: .env
+    volumes:
+      - ./results:/app/results
+    working_dir: /app
