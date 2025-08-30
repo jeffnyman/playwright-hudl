@@ -15,3 +15,7 @@ test("handles a valid login attempt", async () => {
   await hudlLandingPage.validLogin();
   await hudlLandingPage.logout();
 });
+
+test("handles missing email", async () => {
+  await hudlLandingPage.invalidLogin_Missing_Email();
+});

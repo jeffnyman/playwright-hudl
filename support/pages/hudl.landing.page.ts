@@ -8,6 +8,7 @@ export class HudlLandingPage {
   readonly hudlLogout: Locator;
   readonly username: Locator;
   readonly password: Locator;
+  readonly emailError: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -16,6 +17,7 @@ export class HudlLandingPage {
     this.username = page.locator("#username");
     this.password = page.locator("#password");
     this.hudlLogout = page.getByTestId("webnav-usermenu-logout");
+    this.emailError = page.locator("#error-cs-email-required");
   }
 
   async goto() {
@@ -95,7 +97,23 @@ export class HudlLandingPage {
     await this.fillPassword();
     await this.continue();
     await this.verifyProfile();
+  }
 
-    await this.page.pause();
+  async invalidLogin_Missing_Email() {
+    await this.logInDropDown.click();
+    await this.hudlLogin.click();
+    this.username.fill("");
+    await this.continue();
+
+    await expect(this.emailError).toHaveText("Enter an email address");
+
+    // Note that even though the CSS variable is showing as
+    // a hex value of #E81C00, browsers typically return
+    // colors in RGB format so you want to check for that. You
+    // could also check the CSS custom property. Note that
+    // both checks below might be overkill. I would expect a
+    // PR with this code to at least be challenged on that.
+    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.emailError).toHaveClass(/ulp-error-info/);
   }
 }
