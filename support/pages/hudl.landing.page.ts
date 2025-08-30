@@ -9,6 +9,7 @@ export class HudlLandingPage {
   readonly username: Locator;
   readonly password: Locator;
   readonly emailError: Locator;
+  readonly passwordError: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,6 +19,7 @@ export class HudlLandingPage {
     this.password = page.locator("#password");
     this.hudlLogout = page.getByTestId("webnav-usermenu-logout");
     this.emailError = page.locator("#error-cs-email-required");
+    this.passwordError = page.locator("#error-element-password");
   }
 
   async goto() {
@@ -115,5 +117,21 @@ export class HudlLandingPage {
     // PR with this code to at least be challenged on that.
     await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)");
     await expect(this.emailError).toHaveClass(/ulp-error-info/);
+  }
+
+  async invalidLogin_Incorrect_Password() {
+    await this.logInDropDown.click();
+    await this.hudlLogin.click();
+    this.username.fill("tester@example.com");
+    await this.continue();
+    this.password.fill("invalid");
+    await this.continue();
+
+    await expect(this.passwordError).toHaveText(
+      "Incorrect username or password.",
+    );
+
+    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
   }
 }
