@@ -27,3 +27,7 @@ test("handles invalid password", async () => {
 test("handles missing password", async () => {
   await hudlLandingPage.invalidLogin_Missing_Password();
 });
+
+test("handles valid user, but invalid password", async () => {
+  await hudlLandingPage.invalidLogin_Credential_Error();
+});

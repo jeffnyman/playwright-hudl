@@ -150,4 +150,20 @@ export class HudlLandingPage {
     await expect(this.missingPassword).toHaveCSS("color", "rgb(232, 28, 0)");
     await expect(this.missingPassword).toHaveClass(/ulp-validator-error/);
   }
+
+  async invalidLogin_Credential_Error() {
+    await this.logInDropDown.click();
+    await this.hudlLogin.click();
+    await this.fillUsername();
+    await this.continue();
+    this.password.fill("invalid");
+    await this.continue();
+
+    await expect(this.passwordError).toHaveText(
+      "Your email or password is incorrect. Try again.",
+    );
+
+    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
+  }
 }
