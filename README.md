@@ -152,6 +152,18 @@ npx playwright test --project "Tautology Tests" --grep "@canary"
 
 ---
 
+## 📊 Reporting
+
+This project generates all of the standard reporting possible for tests in a Playwright context. It's also possible to write custom reporters and one is provided with this project.
+
+### Summary Reporter
+
+This is a custom reporter is provided that generates a very condensed view of test execution. This condensed format could be used to publish test results to something like an SMS message or a Slack channel update. The default output location is to the root project directory as a file called `summary.txt`. You can change this location in the reporter configuration, which this project does.
+
+There is a `Stats` interface provided that the custom summary reporter uses but this can also be used by your own custom reporter, essentially based on the summary report. For an example of how to do that, you'll see a file called `concise.ts` in the `support/reporter` directory. This project uses that concise report as part of the reporter configuration.
+
+---
+
 ## 👨‍💻 Jeff's Principles of Coding
 
 - Embrace small code.

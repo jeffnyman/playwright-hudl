@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import conciseReport from "./support/reporter/concise";
 import { config } from "dotenv";
 
 config();
@@ -27,6 +28,14 @@ export default defineConfig({
     ["html", { open: "never", outputFolder: "results" }],
     ["json", { outputFile: "results/results.json" }],
     ["junit", { outputFile: "results/results.xml" }],
+    [
+      "./support/reporter/summary/reporter.ts",
+      { outputFile: "results/summary.txt" },
+    ],
+    [
+      "./support/reporter/summary/reporter.ts",
+      { outputFile: "results/concise.txt", inputTemplate: conciseReport },
+    ],
   ],
 
   /**
