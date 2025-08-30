@@ -10,6 +10,7 @@ export class HudlLandingPage {
   readonly password: Locator;
   readonly emailError: Locator;
   readonly passwordError: Locator;
+  readonly missingPassword: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -20,6 +21,7 @@ export class HudlLandingPage {
     this.hudlLogout = page.getByTestId("webnav-usermenu-logout");
     this.emailError = page.locator("#error-cs-email-required");
     this.passwordError = page.locator("#error-element-password");
+    this.missingPassword = page.locator("#error-cs-password-required");
   }
 
   async goto() {
@@ -133,5 +135,19 @@ export class HudlLandingPage {
 
     await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)");
     await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
+  }
+
+  async invalidLogin_Missing_Password() {
+    await this.logInDropDown.click();
+    await this.hudlLogin.click();
+    this.username.fill("tester@example.com");
+    await this.continue();
+    this.password.fill("");
+    await this.continue();
+
+    await expect(this.missingPassword).toHaveText("Enter your password.");
+
+    await expect(this.missingPassword).toHaveCSS("color", "rgb(232, 28, 0)");
+    await expect(this.missingPassword).toHaveClass(/ulp-validator-error/);
   }
 }
