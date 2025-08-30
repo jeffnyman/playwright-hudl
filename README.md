@@ -50,7 +50,7 @@ Make sure you have [Node.js](https://nodejs.org/en). The LTS version should be f
 
 Clone the repository and then set everything up:
 
-```shell
+```sh
 npm ci
 ```
 
@@ -58,8 +58,20 @@ The reason for `npm ci` is covered best in this [Stack Overflow answer](https://
 
 Make sure to install the browsers that Playwright will need.
 
-```shell
+```sh
 npx playwright install
+```
+
+Run the Hudl-specific tests:
+
+```sh
+npm run test:hudl
+```
+
+Check out the test report:
+
+```sh
+npm run test:report
 ```
 
 ## 💻 Execution
@@ -67,6 +79,14 @@ npx playwright install
 In Playwright, a project is a logical group of tests that run using the same configuration. The sections below will each be shown with a command that executes the specific project. For any examples that are marked as UI, you can pass the `--headed` argument in order to see the browser execution.
 
 You can run any Playwright tests using the [VS Code extension](https://playwright.dev/docs/getting-started-vscode) if you have it installed.
+
+You can run all tests:
+
+```sh
+npm test
+```
+
+Below is a breakdown of test execution within the repository.
 
 ### 🔸 Hudl UI Tests
 
