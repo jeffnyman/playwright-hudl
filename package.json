@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/jeffnyman/playwright-hudl#readme",
   "scripts": {
+    "test": "npx playwright test",
+    "test:hudl": "npx playwright test --project 'Hudl Tests' --headed",
+    "test:report": "npx playwright show-report results",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
