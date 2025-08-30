@@ -32,6 +32,13 @@
   <a href="https://stackoverflow.com/questions/tagged/playwright"><img src="https://img.shields.io/badge/stackoverflow-Playwright-e87922.svg?logo=stackoverflow" alt="Playwright - Stack Overflow"></a>
 </p>
 
+---
+
+> [!IMPORTANT]
+> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TSETING.md) document that talks more about overall test strategy.
+
+---
+
 ## 🟢 Prerequisites
 
 Make sure you have [Node.js](https://nodejs.org/en). The LTS version should be fine. You will also need the `npm` package manager, which comes with Node.js. A development environment or IDE with TypeScript/JavaScript support will help. [Visual Studio Code](https://code.visualstudio.com/) is a good choice.

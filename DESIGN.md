@@ -59,6 +59,7 @@ Tests are organized by scenario with descriptive names.
 
 - `handles a valid login attempt`
 - `handles missing email`
+- `handles invalid email`
 - `handles invalid password`
 - `handles missing password`
 - `handles valid user, but invalid password`
