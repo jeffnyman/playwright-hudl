@@ -58,6 +58,22 @@ In Playwright, a project is a logical group of tests that run using the same con
 
 You can run any Playwright tests using the [VS Code extension](https://playwright.dev/docs/getting-started-vscode) if you have it installed.
 
+### 🔸 Hudl UI Tests
+
+To run the Hudl UI tests, you can do this:
+
+```sh
+npx playwright test --project "Hudl Tests"
+```
+
+This project uses an `.env` file to set environment various for authentication. To run these tests, you will want to create an `.env` file in the root of the project directory. By design, the `.env` file is not version controlled.
+
+```sh
+cp .env.sample .env
+```
+
+Fill in the `HUDL_EMAIL` and `HUDL_PASSWORD` with your specific credentials.
+
 ### 🔸 Ludic UI Tests (EXTRA CREDIT)
 
 I'm using my own site material for this. I have a sample article called [A Ludic Historian Précis](https://testerstories.com/xyzzy/ludic/article/precis.html).

@@ -1,4 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
+import { config } from "dotenv";
+
+config();
 
 /**
  * Configuration
@@ -64,6 +67,16 @@ export default defineConfig({
       testMatch: "**/*.spec.ts",
       use: {
         baseURL: "https://testerstories.com",
+        ...devices["Desktop Chrome"],
+      },
+    },
+    {
+      name: "Hudl Tests",
+      testDir: "./tests/ui/hudl",
+      testMatch: "**/*.spec.ts",
+      use: {
+        testIdAttribute: "data-qa-id",
+        baseURL: "https://www.hudl.com/",
         ...devices["Desktop Chrome"],
       },
     },
