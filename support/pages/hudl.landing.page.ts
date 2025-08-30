@@ -1,10 +1,11 @@
-//import { expect, type Locator, type Page } from "@playwright/test";
-import { type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
+import { getRequiredEnv } from "../env";
 
 export class HudlLandingPage {
   readonly page: Page;
   readonly logInDropDown: Locator;
   readonly hudlLogin: Locator;
+  readonly hudlLogout: Locator;
   readonly username: Locator;
   readonly password: Locator;
 
@@ -14,15 +15,27 @@ export class HudlLandingPage {
     this.hudlLogin = page.getByTestId("login-hudl");
     this.username = page.locator("#username");
     this.password = page.locator("#password");
+    this.hudlLogout = page.getByTestId("webnav-usermenu-logout");
   }
 
   async goto() {
     await this.page.goto("/");
   }
 
+  async logout() {
+    // Here I'm clicking the menu trigger to expose the logout.
+    // This is an area where I would prefer to have a specific
+    // testability hook, like an `id` or `data-qa-id`. Notice
+    // also that the use of first() might be something I expect
+    // to at least be questioned in a PR for this code.
+
+    await this.page.locator(".hui-globaluseritem").click();
+    await this.hudlLogout.first().click();
+  }
+
   async fillUsername() {
     try {
-      await this.username.fill(process.env.HUDL_EMAIL);
+      await this.username.fill(getRequiredEnv("HUDL_EMAIL"));
       return true;
     } catch (error) {
       console.log("Failed to fill username field:", error.message);
@@ -32,7 +45,7 @@ export class HudlLandingPage {
 
   async fillPassword() {
     try {
-      await this.password.fill(process.env.HUDL_PASSWORD);
+      await this.password.fill(getRequiredEnv("HUDL_PASSWORD"));
       return true;
     } catch (error) {
       console.log("Failed to fill password field:", error.message);
@@ -54,6 +67,26 @@ export class HudlLandingPage {
       .click();
   }
 
+  async verifyProfile() {
+    // There are various ways to handle this given the nesting in
+    // the CSS. The CSS classes seem specifically designed for this
+    // user menu component and are likely to be stable. By that, I
+    // mean the selectors are quite specific and should reliably
+    // target exactly what I need. That said, I would work with the
+    // developers on adding some testability hooks here, such as a
+    // specific `id` or even a `data-qa-id`. Because I am uncertain
+    // on this, note I have not enshrined these as locators on the
+    // page object itself quite yet. If someone was doing a code
+    // review on a PR for this, I would expect that to be called out.
+
+    await expect(
+      this.page.locator(".hui-globaluseritem__display-name span"),
+    ).toHaveText(getRequiredEnv("HUDL_DISPLAY_NAME"));
+    await expect(this.page.locator(".hui-globaluseritem__email")).toHaveText(
+      getRequiredEnv("HUDL_EMAIL"),
+    );
+  }
+
   async validLogin() {
     await this.logInDropDown.click();
     await this.hudlLogin.click();
@@ -61,6 +94,7 @@ export class HudlLandingPage {
     await this.continue();
     await this.fillPassword();
     await this.continue();
+    await this.verifyProfile();
 
     await this.page.pause();
   }
