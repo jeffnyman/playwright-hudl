@@ -25,6 +25,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
+    "clean": "npx rimraf results",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -45,6 +46,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "prettier": "3.6.2",
+    "rimraf": "^6.0.1",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.41.0"
   }
