@@ -35,7 +35,7 @@
 ---
 
 > [!IMPORTANT]
-> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TSETING.md) document that talks more about overall test strategy.
+> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TSETING.md) document that talks more about overall test strategy. I also kept a relatively [atomic commit history](https://github.com/jeffnyman/playwright-hudl/commits/main/) to show how I built the project from scratch.
 
 ---
 
