@@ -9,6 +9,7 @@ export class HudlLandingPage {
   readonly username: Locator;
   readonly password: Locator;
   readonly emailError: Locator;
+  readonly invalidEmail: Locator;
   readonly passwordError: Locator;
   readonly missingPassword: Locator;
 
@@ -20,6 +21,7 @@ export class HudlLandingPage {
     this.password = page.locator("#password");
     this.hudlLogout = page.getByTestId("webnav-usermenu-logout");
     this.emailError = page.locator("#error-cs-email-required");
+    this.invalidEmail = page.locator("#error-cs-email-invalid");
     this.passwordError = page.locator("#error-element-password");
     this.missingPassword = page.locator("#error-cs-password-required");
   }
@@ -101,6 +103,17 @@ export class HudlLandingPage {
     await this.fillPassword();
     await this.continue();
     await this.verifyProfile();
+  }
+
+  async invalidLogin_Invalid_Email() {
+    await this.logInDropDown.click();
+    await this.hudlLogin.click();
+    this.username.fill("example.com");
+    await this.continue();
+
+    await expect(this.invalidEmail).toHaveText("Enter a valid email.");
+
+    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)");
   }
 
   async invalidLogin_Missing_Email() {

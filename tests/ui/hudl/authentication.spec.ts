@@ -20,6 +20,10 @@ test("handles missing email", async () => {
   await hudlLandingPage.invalidLogin_Missing_Email();
 });
 
+test("handles invalid email", async () => {
+  await hudlLandingPage.invalidLogin_Invalid_Email();
+});
+
 test("handles invalid password", async () => {
   await hudlLandingPage.invalidLogin_Incorrect_Password();
 });
