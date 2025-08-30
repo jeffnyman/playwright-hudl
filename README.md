@@ -35,7 +35,7 @@
 ---
 
 > [!IMPORTANT]
-> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TESTING.md) document that talks more about overall test strategy. You can see my "Principles of Coding" further down in this README.
+> This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TESTING.md) document that talks more about overall test strategy. I also have a [RESILIENCE](RESILIENCE.md) document, which talks about some specifics regarding hardening of tests for uncertain operating conditions. Finally, you can see my "Principles of Coding" further down in this README.
 
 > [!TIP]
 > I also kept a relatively [atomic commit history](https://github.com/jeffnyman/playwright-hudl/commits/main/) to show how I built the project from scratch.

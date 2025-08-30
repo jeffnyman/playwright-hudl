@@ -115,6 +115,6 @@ Some areas intentionally favor simplicity over robustness and I did that to main
 
 Extensive inline comments serve as both documentation and demonstration of critical thinking about some of the automation challenges. I have done that for this assessment but, in a real project, I would likely refactor these into documentation or, even better, address through code improvements. Generally, I believe comments should focus more on _why_ choices rather than _what_ and _how_ choices.
 
-## Conclusion
+## Summing Up!
 
 What I hope this design demonstrates is my understanding of automation testing fundamentals while maintaining focus on practical, maintainable solutions, particularly in the context of a time-boxed assessment. I feel my approach balances simplicity with good practices, providing a solid foundation that can be enhanced as requirements evolve.
