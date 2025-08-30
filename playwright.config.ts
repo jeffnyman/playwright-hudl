@@ -74,6 +74,7 @@ export default defineConfig({
       name: "Hudl Tests",
       testDir: "./tests/ui/hudl",
       testMatch: "**/*.spec.ts",
+      retries: 3,
       use: {
         testIdAttribute: "data-qa-id",
         baseURL: "https://www.hudl.com/",

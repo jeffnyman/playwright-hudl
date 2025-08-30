@@ -27,7 +27,7 @@ export class HudlLandingPage {
   }
 
   async goto() {
-    await this.page.goto("/");
+    await this.page.goto("/", { waitUntil: "networkidle" });
   }
 
   async logout() {
