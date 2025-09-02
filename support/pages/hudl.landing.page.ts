@@ -1,5 +1,12 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import { getRequiredEnv } from "../env";
+import { expectError } from "../assertions/hudl.assertions";
+import { hudlUiContract as ui } from "../contracts/hudl.ui.contract";
+
+// Helper for resilience: support either data-testid or data-qa-id.
+function byAnyTestId(page: Page, id: string): Locator {
+  return page.locator(`[data-testid="${id}"], [data-qa-id="${id}"]`);
+}
 
 export class HudlLandingPage {
   readonly page: Page;
@@ -12,106 +19,79 @@ export class HudlLandingPage {
   readonly invalidEmail: Locator;
   readonly passwordError: Locator;
   readonly missingPassword: Locator;
+  readonly continueBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.logInDropDown = page.getByTestId("login-select");
-    this.hudlLogin = page.getByTestId("login-hudl");
+
+    this.logInDropDown = byAnyTestId(page, "login-select");
+    this.hudlLogin = byAnyTestId(page, "login-hudl");
+    this.hudlLogout = byAnyTestId(page, "webnav-usermenu-logout");
+
     this.username = page.locator("#username");
     this.password = page.locator("#password");
-    this.hudlLogout = page.getByTestId("webnav-usermenu-logout");
+
     this.emailError = page.locator("#error-cs-email-required");
     this.invalidEmail = page.locator("#error-cs-email-invalid");
     this.passwordError = page.locator("#error-element-password");
     this.missingPassword = page.locator("#error-cs-password-required");
+
+    this.continueBtn = page.getByRole("button", {
+      name: "Continue",
+      exact: true,
+    });
   }
 
-  static async checkSiteHealth(page) {
+  static async checkSiteHealth(page: Page): Promise<boolean> {
     try {
-      console.log("Performing Hudl.com health check...");
-
-      const response = await page.request.get("https://www.hudl.com/", {
-        timeout: 20000,
+      const res = await page.request.get("https://www.hudl.com/", {
+        timeout: 10_000,
       });
-
-      if (response.status() >= 400) {
-        throw new Error(`HTTP ${response.status()}: ${response.statusText()}`);
-      }
-
+      if (!res.ok())
+        throw new Error(`HTTP ${res.status()}: ${res.statusText()}`);
       await page.goto("https://www.hudl.com/", {
         waitUntil: "domcontentloaded",
-        timeout: 30000,
+        timeout: 20_000,
       });
-
-      console.log("✅ Hudl.com health check passed");
       return true;
-    } catch (error) {
-      console.error("❌ Hudl.com health check failed:", error.message);
+    } catch {
       return false;
     }
   }
 
   async goto() {
-    await this.page.goto("/", { waitUntil: "networkidle" });
+    await this.page.goto("/", {
+      waitUntil: "domcontentloaded",
+      timeout: 20_000,
+    });
+    await this.logInDropDown.waitFor({ state: "visible", timeout: 15_000 });
   }
 
   async logout() {
-    // Here I'm clicking the menu trigger to expose the logout.
-    // This is an area where I would prefer to have a specific
-    // testability hook, like an `id` or `data-qa-id`. Notice
-    // also that the use of first() might be something I expect
-    // to at least be questioned in a PR for this code.
+    const userMenuTrigger = this.page.locator(".hui-globaluseritem");
+    await userMenuTrigger.waitFor({ state: "visible" });
+    await userMenuTrigger.click();
 
-    await this.page.locator(".hui-globaluseritem").click();
+    await this.hudlLogout.first().waitFor({ state: "visible" });
     await this.hudlLogout.first().click();
   }
 
-  async fillUsername() {
-    try {
-      await this.username.fill(getRequiredEnv("HUDL_EMAIL"));
-      return true;
-    } catch (error) {
-      console.log("Failed to fill username field:", error.message);
-      return false;
-    }
+  async fillUsername(value = getRequiredEnv("HUDL_EMAIL")) {
+    await this.username.waitFor({ state: "visible" });
+    await this.username.fill(value);
   }
 
-  async fillPassword() {
-    try {
-      await this.password.fill(getRequiredEnv("HUDL_PASSWORD"));
-      return true;
-    } catch (error) {
-      console.log("Failed to fill password field:", error.message);
-      return false;
-    }
+  async fillPassword(value = getRequiredEnv("HUDL_PASSWORD")) {
+    await this.password.waitFor({ state: "visible" });
+    await this.password.fill(value);
   }
 
   async continue() {
-    // Note: There are many ways to handle this. The approach below
-    // uses the accessible name, which is the text of the button.
-    // Other approaches would be to combine the type, name and value.
-    // That's probably most specific:
-    //    ('button[type="submit"][name="action"][value="default"]')
-    // You could also filter by the type:
-    //    ('button[type="submit"]').filter({ hasText: /^Continue$/ })
-
-    await this.page
-      .getByRole("button", { name: "Continue", exact: true })
-      .click();
+    await this.continueBtn.waitFor({ state: "visible" });
+    await this.continueBtn.click();
   }
 
   async verifyProfile() {
-    // There are various ways to handle this given the nesting in
-    // the CSS. The CSS classes seem specifically designed for this
-    // user menu component and are likely to be stable. By that, I
-    // mean the selectors are quite specific and should reliably
-    // target exactly what I need. That said, I would work with the
-    // developers on adding some testability hooks here, such as a
-    // specific `id` or even a `data-qa-id`. Because I am uncertain
-    // on this, note I have not enshrined these as locators on the
-    // page object itself quite yet. If someone was doing a code
-    // review on a PR for this, I would expect that to be called out.
-
     await expect(
       this.page.locator(".hui-globaluseritem__display-name span"),
     ).toHaveText(getRequiredEnv("HUDL_DISPLAY_NAME"));
@@ -130,73 +110,81 @@ export class HudlLandingPage {
     await this.verifyProfile();
   }
 
+  // ---------- Semantic assertion helpers (delegate to expectError) ----------
+
+  async assertInvalidEmailError() {
+    // Text is on #error-cs-email-invalid; color might be applied on #error-cs-email-required.
+    await expectError(this.invalidEmail, {
+      text: ui.errors.emailInvalid,
+      // class is optional here if Hudl doesn't apply one consistently for this case
+      colorLocator: this.emailError, // use this if you've observed color there
+    });
+  }
+
+  async assertMissingEmailError() {
+    await expectError(this.emailError, {
+      text: ui.errors.emailRequired,
+      klass: /ulp-error-info/,
+    });
+  }
+
+  async assertIncorrectPasswordErrorGeneric() {
+    await expectError(this.passwordError, {
+      text: ui.errors.badCredsGeneric,
+      klass: /ulp-input-error-message/,
+    });
+  }
+
+  async assertMissingPasswordError() {
+    await expectError(this.missingPassword, {
+      text: ui.errors.passwordRequired,
+      klass: /ulp-validator-error/,
+    });
+  }
+
+  async assertBadCredsSpecificError() {
+    await expectError(this.passwordError, {
+      text: ui.errors.badCredsSpecific,
+      klass: /ulp-input-error-message/,
+    });
+  }
+
+  // ---------- Negative flows using the semantic assertions ----------
+
   async invalidLogin_Invalid_Email() {
     await this.logInDropDown.click();
     await this.hudlLogin.click();
-    this.username.fill("example.com");
+    await this.fillUsername("example.com");
     await this.continue();
-
-    await expect(this.invalidEmail).toHaveText("Enter a valid email.");
-
-    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)", {
-      timeout: 10000,
-    });
+    await this.assertInvalidEmailError();
   }
 
   async invalidLogin_Missing_Email() {
     await this.logInDropDown.click();
     await this.hudlLogin.click();
-    this.username.fill("");
+    await this.fillUsername("");
     await this.continue();
-
-    await expect(this.emailError).toHaveText("Enter an email address");
-
-    // Note that even though the CSS variable is showing as
-    // a hex value of #E81C00, browsers typically return
-    // colors in RGB format so you want to check for that. You
-    // could also check the CSS custom property. Note that
-    // both checks below might be overkill. I would expect a
-    // PR with this code to at least be challenged on that. The
-    // timeout is for a classic timing issue with CSS loading.
-    // The idea is to handle default/placeholder colors.
-    await expect(this.emailError).toHaveCSS("color", "rgb(232, 28, 0)", {
-      timeout: 10000,
-    });
-    await expect(this.emailError).toHaveClass(/ulp-error-info/);
+    await this.assertMissingEmailError();
   }
 
   async invalidLogin_Incorrect_Password() {
     await this.logInDropDown.click();
     await this.hudlLogin.click();
-    this.username.fill("tester@example.com");
+    await this.fillUsername("tester@example.com");
     await this.continue();
-    this.password.fill("invalid");
+    await this.fillPassword("invalid");
     await this.continue();
-
-    await expect(this.passwordError).toHaveText(
-      "Incorrect username or password.",
-    );
-
-    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)", {
-      timeout: 10000,
-    });
-    await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
+    await this.assertIncorrectPasswordErrorGeneric();
   }
 
   async invalidLogin_Missing_Password() {
     await this.logInDropDown.click();
     await this.hudlLogin.click();
-    this.username.fill("tester@example.com");
+    await this.fillUsername("tester@example.com");
     await this.continue();
-    this.password.fill("");
+    await this.fillPassword("");
     await this.continue();
-
-    await expect(this.missingPassword).toHaveText("Enter your password.");
-
-    await expect(this.missingPassword).toHaveCSS("color", "rgb(232, 28, 0)", {
-      timeout: 10000,
-    });
-    await expect(this.missingPassword).toHaveClass(/ulp-validator-error/);
+    await this.assertMissingPasswordError();
   }
 
   async invalidLogin_Credential_Error() {
@@ -204,16 +192,8 @@ export class HudlLandingPage {
     await this.hudlLogin.click();
     await this.fillUsername();
     await this.continue();
-    this.password.fill("invalid");
+    await this.fillPassword("invalid");
     await this.continue();
-
-    await expect(this.passwordError).toHaveText(
-      "Your email or password is incorrect. Try again.",
-    );
-
-    await expect(this.passwordError).toHaveCSS("color", "rgb(232, 28, 0)", {
-      timeout: 10000,
-    });
-    await expect(this.passwordError).toHaveClass(/ulp-input-error-message/);
+    await this.assertBadCredsSpecificError();
   }
 }
