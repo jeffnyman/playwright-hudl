@@ -23,6 +23,8 @@ export const hudlUiContract = {
   },
 };
 
+export type HudlUiContract = typeof hudlUiContract;
+
 /**
  * Example of how this would look. This is not actual Hudl
  * functionality. The main thing to note is any such spec

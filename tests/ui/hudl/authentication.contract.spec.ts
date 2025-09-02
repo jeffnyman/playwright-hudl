@@ -3,10 +3,9 @@
 // more with a contract style approach. This is based on the
 // updated authentication spec.
 
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { HudlLandingPage } from "../../../support/pages/hudl.landing.page";
 import { getHudlCredentials } from "../../../support/env";
-import { hudlUiContract as ui } from "../../../support/contracts/hudl.ui.contract";
 
 let hudl: HudlLandingPage;
 
@@ -15,13 +14,15 @@ test.describe("Hudl Authentication", () => {
     const page = await browser.newPage();
     const isHealthy = await HudlLandingPage.checkSiteHealth(page);
     await page.close();
-
     if (!isHealthy) {
       test.skip(true, "Skipping Hudl tests. Site appears to be down or slow.");
     }
   });
 
   test.beforeEach(async ({ page }) => {
+    // Reduce timing flake from UI animations.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+
     getHudlCredentials();
 
     hudl = new HudlLandingPage(page);
@@ -29,23 +30,17 @@ test.describe("Hudl Authentication", () => {
   });
 
   test("valid login allows user to reach profile, then logout", async () => {
-    await test.step("login with valid credentials", async () => {
-      await hudl.validLogin();
-    });
-
-    await test.step("verify and logout", async () => {
-      await hudl.logout();
-      await expect(hudl.logInDropDown).toBeVisible({ timeout: 15000 });
-    });
+    await hudl.validLogin();
+    await hudl.logout();
+    await hudl.expectLoggedOut();
   });
 
+  // Table-driven negative cases that delegate to page-object semantic assertions.
   type NegCase = {
     name: string;
-    email: string | null;
-    password: string | null;
-    expectLocator: (p: HudlLandingPage) => import("@playwright/test").Locator;
-    expectText: string | RegExp;
-    exact?: boolean;
+    email: string | null; // null means "don't fill username yet"
+    password: string | null; // null means "don't fill password"
+    assert: (p: HudlLandingPage) => Promise<void>;
   };
 
   const negCases: NegCase[] = [
@@ -53,30 +48,25 @@ test.describe("Hudl Authentication", () => {
       name: "missing email",
       email: "",
       password: null,
-      expectLocator: (p) => p.emailError,
-      expectText: ui.errors.emailRequired,
-      exact: true,
+      assert: (p) => p.assertMissingEmailError(),
     },
     {
       name: "invalid email",
       email: "example.com",
       password: null,
-      expectLocator: (p) => p.invalidEmail,
-      expectText: new RegExp(ui.errors.emailInvalid, "i"),
+      assert: (p) => p.assertInvalidEmailError(),
     },
     {
       name: "missing password",
       email: "tester@example.com",
       password: "",
-      expectLocator: (p) => p.missingPassword,
-      expectText: new RegExp(ui.errors.passwordRequired, "i"),
+      assert: (p) => p.assertMissingPasswordError(),
     },
     {
       name: "invalid password (generic message for non-existent user)",
       email: "tester@example.com",
       password: "invalid",
-      expectLocator: (p) => p.passwordError,
-      expectText: new RegExp(ui.errors.badCredsGeneric, "i"),
+      assert: (p) => p.assertIncorrectPasswordErrorGeneric(),
     },
   ];
 
@@ -95,22 +85,7 @@ test.describe("Hudl Authentication", () => {
         await hudl.continue();
       }
 
-      const target = c.expectLocator(hudl);
-      if (c.exact) {
-        await expect(target).toHaveText(c.expectText as string);
-      } else {
-        await expect(target).toContainText(c.expectText);
-      }
-
-      if (
-        target === hudl.emailError ||
-        target === hudl.missingPassword ||
-        target === hudl.passwordError
-      ) {
-        await expect(target).toHaveCSS("color", ui.colors.errorRed, {
-          timeout: 10_000,
-        });
-      }
+      await c.assert(hudl);
     });
   }
 
@@ -118,15 +93,12 @@ test.describe("Hudl Authentication", () => {
     await hudl.logInDropDown.click();
     await hudl.hudlLogin.click();
 
-    await hudl.fillUsername();
+    await hudl.fillUsername(); // uses HUDL_EMAIL from env
     await hudl.continue();
 
     await hudl.fillPassword("invalid");
     await hudl.continue();
 
-    await expect(hudl.passwordError).toHaveText(ui.errors.badCredsSpecific);
-    await expect(hudl.passwordError).toHaveCSS("color", ui.colors.errorRed, {
-      timeout: 10_000,
-    });
+    await hudl.assertBadCredsSpecificError();
   });
 });

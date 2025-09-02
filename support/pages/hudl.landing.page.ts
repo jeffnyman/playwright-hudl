@@ -3,9 +3,18 @@ import { getRequiredEnv } from "../env";
 import { expectError } from "../assertions/hudl.assertions";
 import { hudlUiContract as ui } from "../contracts/hudl.ui.contract";
 
-// Helper for resilience: support either data-testid or data-qa-id.
+// Support either `data-testid` or `data-qa-id`.
 function byAnyTestId(page: Page, id: string): Locator {
   return page.locator(`[data-testid="${id}"], [data-qa-id="${id}"]`);
+}
+
+async function settled(p: Promise<unknown>): Promise<boolean> {
+  try {
+    await p;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export class HudlLandingPage {
@@ -31,6 +40,7 @@ export class HudlLandingPage {
     this.username = page.locator("#username");
     this.password = page.locator("#password");
 
+    // Error containers
     this.emailError = page.locator("#error-cs-email-required");
     this.invalidEmail = page.locator("#error-cs-email-invalid");
     this.passwordError = page.locator("#error-element-password");
@@ -41,6 +51,8 @@ export class HudlLandingPage {
       exact: true,
     });
   }
+
+  // --- Navigation / setup ---
 
   static async checkSiteHealth(page: Page): Promise<boolean> {
     try {
@@ -67,14 +79,60 @@ export class HudlLandingPage {
     await this.logInDropDown.waitFor({ state: "visible", timeout: 15_000 });
   }
 
+  // --- Session helpers ---
+
   async logout() {
     const userMenuTrigger = this.page.locator(".hui-globaluseritem");
     await userMenuTrigger.waitFor({ state: "visible" });
     await userMenuTrigger.click();
 
-    await this.hudlLogout.first().waitFor({ state: "visible" });
-    await this.hudlLogout.first().click();
+    const logoutItem = this.hudlLogout.first();
+    await logoutItem.waitFor({ state: "visible" });
+
+    // Allow for SPA route change or a soft navigation.
+    const maybeNav = this.page
+      .waitForLoadState("domcontentloaded")
+      .catch(() => {});
+    await logoutItem.click();
+    await maybeNav;
   }
+
+  async expectLoggedOut() {
+    // 1) Home header visible?
+    if (
+      await settled(
+        this.logInDropDown.waitFor({ state: "visible", timeout: 8000 }),
+      )
+    )
+      return;
+
+    // 2) Dedicated login screen?
+    if (
+      await settled(
+        this.page
+          .getByRole("button", { name: /log in/i })
+          .waitFor({ state: "visible", timeout: 8000 }),
+      )
+    )
+      return;
+
+    // 3) Login URL matched?
+    if (
+      await settled(
+        this.page.waitForURL(/hudl\.com\/login/i, { timeout: 8000 }),
+      )
+    )
+      return;
+
+    // 4) Fallback: go home, then assert.
+    await this.page.goto("/", {
+      waitUntil: "domcontentloaded",
+      timeout: 20_000,
+    });
+    await this.logInDropDown.waitFor({ state: "visible", timeout: 8000 });
+  }
+
+  // --- Field helpers ---
 
   async fillUsername(value = getRequiredEnv("HUDL_EMAIL")) {
     await this.username.waitFor({ state: "visible" });
@@ -100,6 +158,8 @@ export class HudlLandingPage {
     );
   }
 
+  // --- Flows ---
+
   async validLogin() {
     await this.logInDropDown.click();
     await this.hudlLogin.click();
@@ -110,14 +170,13 @@ export class HudlLandingPage {
     await this.verifyProfile();
   }
 
-  // ---------- Semantic assertion helpers (delegate to expectError) ----------
+  // --- Semantic assertions (delegate to helper) ---
 
   async assertInvalidEmailError() {
-    // Text is on #error-cs-email-invalid; color might be applied on #error-cs-email-required.
+    // Sometimes the red color is applied on `emailError` while the text sits on `invalidEmail`.
     await expectError(this.invalidEmail, {
       text: ui.errors.emailInvalid,
-      // class is optional here if Hudl doesn't apply one consistently for this case
-      colorLocator: this.emailError, // use this if you've observed color there
+      colorLocator: this.emailError,
     });
   }
 
@@ -149,7 +208,7 @@ export class HudlLandingPage {
     });
   }
 
-  // ---------- Negative flows using the semantic assertions ----------
+  // --- Negative flows using the semantic assertions ---
 
   async invalidLogin_Invalid_Email() {
     await this.logInDropDown.click();
