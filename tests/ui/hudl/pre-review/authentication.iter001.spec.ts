@@ -3,8 +3,8 @@
 // that will showcase some of the simple changes that can be made.
 
 import { test } from "@playwright/test";
-import { HudlLandingPage } from "../../../support/pages/hudl.landing.page";
-import { getHudlCredentials } from "../../../support/env";
+import { HudlLandingPage } from "../../../../support/pages/hudl.landing.page";
+import { getHudlCredentials } from "../../../../support/env";
 
 let hudlLandingPage: HudlLandingPage;
 

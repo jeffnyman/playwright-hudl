@@ -35,7 +35,7 @@
 ---
 
 > [!NOTE]  
-> This repo has been updated post assessment but prior to the team review. This is me showing how I would evolve the project a bit, which can help with the next phase of the process. I have included a [HUDL-REVIEW](HUDL-REVIEW.md) document that covers the changes. Since these changes are between assessment and review, I have kept the original files in place.
+> This repo has been updated post assessment but prior to the team review. This is me showing how I would evolve the project a bit, which can help with the next phase of the process. I have included a [HUDL-REVIEW](HUDL-REVIEW.md) document that covers the changes. Since these changes are between assessment and review, I have kept the original files in place. Those original files were placed in a `pre-review` directory.
 
 > [!IMPORTANT]
 > This project contains a [DESIGN](DESIGN.md) document that talks about the design of the automation itself. There is also a [TESTING](TESTING.md) document that talks more about overall test strategy. I also have a [RESILIENCE](RESILIENCE.md) document, which talks about some specifics regarding hardening of tests for uncertain operating conditions. Finally, you can see my "Principles of Coding" further down in this README.

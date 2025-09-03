@@ -4,7 +4,7 @@
 // See hudl.landing.page.ts for the new content.
 
 import { expect, type Locator, type Page } from "@playwright/test";
-import { getRequiredEnv } from "../env";
+import { getRequiredEnv } from "../../env";
 
 // CHANGED THE NAME TO KEEP THE LOGIC BUT USE THE NEWER PAGE OBJECT
 export class HudlLandingPagePrevious {

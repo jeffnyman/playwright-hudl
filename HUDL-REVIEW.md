@@ -34,9 +34,6 @@ This doc summarizes what I implemented from the initial examples (submitted for 
 
 ---
 
-
----
-
 ## Usage Patterns
 
 - **authentication.*.spec.ts**
