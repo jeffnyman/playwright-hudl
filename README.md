@@ -121,7 +121,7 @@ npx playwright test --project "Ludic UI Tests"
 
 ### 🔸 Playground UI Tests (EXTRA CREDIT)
 
-The application is here is my [Playwright Playwround](https://testerstories.com/xyzzy/). The playground area is designed to provide a simple landing page but then add some complexity. For example, the navigation pull out menu can have some challenges around checking for visibility and whether the widgets are in the viewport or not.
+The application here is my [Playwright Playwround](https://testerstories.com/xyzzy/). The playground area is designed to provide a simple landing page but then add some complexity. For example, the navigation pull out menu can have some challenges around checking for visibility and whether the widgets are in the viewport or not.
 
 To run all the tests:
 

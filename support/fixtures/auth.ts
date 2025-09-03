@@ -30,3 +30,28 @@ export const test = base.extend<{ authedPage }>({
 });
 
 export const expect = base.expect;
+
+/**
+ * Example of how this would look. This is not actual Hudl
+ * functionality. The main thing to note is any such spec
+ * would starts tests already logged in and this is due to
+ * the authedPage fixture. That Keeps any specs like this
+ * exmaple focused on post-auth functionality.
+
+import { test, expect } from "../../../support/fixtures/auth";
+import { HudlLandingPage } from "../../../support/pages/hudl.landing.page";
+
+test.describe("Hudl Dashboard (authenticated)", () => {
+  test("shows the user menu with display name and email", async ({ authedPage }) => {
+    const hudl = new HudlLandingPage(authedPage);
+
+    // We’re already logged in thanks to the fixture, so just verify profile.
+    await hudl.verifyProfile();
+  });
+
+  test("navigates to the library from the dashboard", async ({ authedPage }) => {
+    await authedPage.click('a[href*="library"]');
+    await expect(authedPage.getByRole("heading", { name: /library/i })).toBeVisible();
+  });
+});
+*/
